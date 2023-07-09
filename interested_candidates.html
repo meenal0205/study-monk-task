@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Interested Candidates</title>
+    <link rel="stylesheet" href="search.css" />
+  </head>
+  <body>
+    <h2>Interested Candidates</h2>
+    <ul id="interestedCandidateList" class="candidateList"></ul>
+
+    <script>
+      // JavaScript code to retrieve and display interested candidates
+      document.addEventListener("DOMContentLoaded", function () {
+        var interestedCandidates = getInterestedCandidatesFromLocalStorage();
+
+        var interestedCandidateList = document.getElementById(
+          "interestedCandidateList"
+        );
+        interestedCandidateList.innerHTML = ""; // Clear previous list
+
+        if (interestedCandidates.length > 0) {
+          interestedCandidates.forEach(function (candidate) {
+            var listItem = document.createElement("div");
+            listItem.innerHTML +=
+              `
+            <div class="card">
+              <img src="candidate.png" alt="">
+              <div class="card__title">` +
+              candidate.name +
+              `</div>
+              <div class="card__subtitle">` +
+              candidate.jobRole +
+              `</div>
+              <div class="card__subtitle">` +
+              candidate.location +
+              `</div>
+
+              
+          </div>`;
+            var selectButton = document.createElement("button");
+            selectButton.classList.add("card__btn");
+            selectButton.textContent = "Remove";
+            selectButton.addEventListener("click", function () {
+              markCandidateAsUnInterested(candidate.id);
+            });
+
+            listItem.appendChild(selectButton);
+            interestedCandidateList.appendChild(listItem);
+            interestedCandidateList.appendChild(listItem);
+          });
+        } else {
+          var noResultsItem = document.createElement("li");
+          noResultsItem.textContent = "No interested candidates found.";
+          interestedCandidateList.appendChild(noResultsItem);
+        }
+      });
+      function getCandidatesFromLocalStorage() {
+        var storedCandidates = localStorage.getItem("candidates");
+        return storedCandidates ? JSON.parse(storedCandidates) : [];
+      }
+      function markCandidateAsUnInterested(candidateId) {
+        // Retrieve candidates from local storage
+        var candidates = getCandidatesFromLocalStorage();
+
+        // Find the candidate by ID
+        var candidateIndex = candidates.findIndex(function (candidate) {
+          return candidate.id === candidateId;
+        });
+
+        // Update candidate's interested status
+        if (candidateIndex !== -1) {
+          candidates[candidateIndex].interested = false;
+          localStorage.setItem("candidates", JSON.stringify(candidates));
+          alert(
+            "Candidate is Remove! Please refresh the page if changes are not visible"
+          );
+        }
+      }
+
+      // Retrieve interested candidates from local storage
+      function getInterestedCandidatesFromLocalStorage() {
+        var storedCandidates = localStorage.getItem("candidates");
+        if (storedCandidates) {
+          var candidates = JSON.parse(storedCandidates);
+          return candidates.filter(function (candidate) {
+            return candidate.interested === true;
+          });
+        }
+        return [];
+      }
+    </script>
+  </body>
+</html>

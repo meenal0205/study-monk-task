@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login Page</title>
+  </head>
+  <link rel="stylesheet" href="registration.css" />
+  <body>
+    <div class="container flex">
+      <div class="facebook-page flex">
+        <div class="text">
+          <h1>Hiring Partner</h1>
+          <p>Helping People Hire the perfect candidates</p>
+        </div>
+        <form action="#" id="loginForm">
+          <input type="text" placeholder="Username" id="username" required />
+          <input
+            type="password"
+            placeholder="Password"
+            id="password"
+            required
+          />
+          <div class="link">
+            <button type="submit" class="login">Login</button>
+          </div>
+          <hr />
+          <div class="button">
+            <a href="register.html">Create new account</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript code to handle login form submission
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent form submission
+
+          // Get form data
+          var username = document.getElementById("username").value;
+          var password = document.getElementById("password").value;
+
+          // Retrieve stored user data from local storage
+          var storedData = localStorage.getItem("userData");
+          if (storedData) {
+            var userData = JSON.parse(storedData);
+
+            // Check if username and password match
+            if (
+              username === userData.username &&
+              password === userData.password
+            ) {
+              // Authentication successful
+              alert("Login successful");
+              // Optionally, redirect to the dashboard or another page
+              window.location.href = "homepage.html";
+            } else {
+              // Authentication failed
+              alert("Invalid username or password");
+            }
+          } else {
+            // No user data found
+            alert("User does not exist");
+          }
+        });
+    </script>
+  </body>
+</html>

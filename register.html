@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Registration Page</title>
+  </head>
+  <link rel="stylesheet" href="registration.css" />
+  <body>
+    <div class="container flex">
+      <div class="facebook-page flex">
+        <div class="text">
+          <div class="text" style="margin-top: 150px">
+            <h1>Hiring Partner</h1>
+            <p>Helping People Hire the perfect candidates</p>
+          </div>
+        </div>
+        <form id="registrationForm">
+          <input type="text" placeholder="Username" id="username" required />
+          <input
+            type="password"
+            placeholder="Password"
+            id="password"
+            required
+          />
+
+          <div class="link">
+            <button type="submit" class="login">Sign Up</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("registrationForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          var username = document.getElementById("username").value;
+          var password = document.getElementById("password").value;
+
+          var userData = {
+            username: username,
+            password: password,
+          };
+          localStorage.setItem("userData", JSON.stringify(userData));
+
+          window.location.href = "home.html";
+        });
+    </script>
+  </body>
+</html>

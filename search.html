@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="search.css" />
+    <title>Candidate Search</title>
+  </head>
+  <body>
+    <div class="headers">
+      <h2>Candidate Search</h2>
+      <a href="interested_candidates.html">View Interested Candidates</a>
+    </div>
+
+    <form id="searchForm">
+      <input type="search" placeholder="Enter Location" id="location" />
+
+      <input type="search" placeholder="Enter Job Role" id="jobRole" />
+      <div class="link"><button type="submit" class="login">Search</button>
+      </form></div>
+      
+
+    <h2>Search Results</h2>
+    <div class="candidateList" id="candidateList"></div>
+
+    <script>
+    
+      var newCandidates = [
+        {
+          id: 1,
+          name: "John Doe",
+          location: "New York",
+          jobRole: "Software Engineer",
+          interested: false,
+          rank:''
+        },
+        {
+          id: 2,
+          name: "Alex Smith",
+          location: "London",
+          jobRole: "Frontend Developer",
+          interested: false,
+          rank:''
+        },
+        {
+          id: 3,
+          name: "Lucy",
+          location: "Chicago",
+          jobRole: "Software Engineer",
+          interested: false,
+          rank:''
+        },
+        {
+          id: 4,
+          name: "Joy",
+          location: "Bangalore",
+          jobRole: "Backend Developer",
+          interested: false,
+          rank:''
+        },
+        {
+          id: 5,
+          name: "Jane",
+          location: "London",
+          jobRole: "Software D  7eveloper",
+          interested: false,
+          rank:''
+        },
+        {
+          id: 6,
+          name: "Max",
+          location: "London",
+          jobRole: "Product Manager",
+          interested: false,
+          rank:''
+        },
+      ];
+
+      var existingCandidates = localStorage.getItem("candidates");
+
+      var candidates = existingCandidates ? JSON.parse(existingCandidates) : [];
+
+      newCandidates = newCandidates.filter(function (newCandidate) {
+        var isDuplicate = candidates.some(function (candidate) {
+          return candidate.id === newCandidate.id;
+        });
+        return !isDuplicate;
+      });
+
+      candidates = candidates.concat(newCandidates);
+
+      localStorage.setItem("candidates", JSON.stringify(candidates));
+
+      document
+        .getElementById("searchForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          var location = document.getElementById("location").value;
+          var jobRole = document.getElementById("jobRole").value;
+
+          var candidates = getCandidatesFromLocalStorage();
+          var filteredCandidates = candidates.filter(function (candidate) {
+            return (
+              candidate.location
+                .toLowerCase()
+                .includes(location.toLowerCase()) &&
+              candidate.jobRole.toLowerCase().includes(jobRole.toLowerCase())
+            );
+          });
+
+          // Display search results
+          var candidateList = document.getElementById("candidateList");
+          candidateList.innerHTML = ""; // Clear previous results
+
+          if (filteredCandidates.length > 0) {
+            filteredCandidates.forEach(function (candidate) {
+              var listItem = document.createElement("div");
+              listItem.innerHTML +=
+                `
+              <div class="card">
+                <img src="candidate.png" alt=""/>
+               
+                <div class="card__title">` +
+                candidate.name +
+                `</div>
+                <div class="card__subtitle">` +
+                candidate.jobRole +
+                `</div>
+                <div class="card__subtitle">` +
+                candidate.location +
+                `</div>
+
+                
+            </div>`;
+
+              // Add a button to mark the candidate as interested
+              var selectButton = document.createElement("button");
+              selectButton.classList.add("card__btn");
+              selectButton.textContent = "Select";
+              selectButton.addEventListener("click", function () {
+                // Perform candidate selection logic
+                markCandidateAsInterested(candidate.id);
+              });
+
+              listItem.appendChild(selectButton);
+              candidateList.appendChild(listItem);
+            });
+          } else {
+            var noResultsItem = document.createElement("li");
+            noResultsItem.textContent = "No results found.";
+            candidateList.appendChild(noResultsItem);
+          }
+        });
+
+      // Retrieve candidates from local storage (dummy example)
+      function getCandidatesFromLocalStorage() {
+        var storedCandidates = localStorage.getItem("candidates");
+        return storedCandidates ? JSON.parse(storedCandidates) : [];
+      }
+
+      // Mark candidate as interested (dummy example)
+      function markCandidateAsInterested(candidateId) {
+        // Retrieve candidates from local storage
+        var candidates = getCandidatesFromLocalStorage();
+
+        // Find the candidate by ID
+        var candidateIndex = candidates.findIndex(function (candidate) {
+          return candidate.id === candidateId;
+        });
+
+        // Update candidate's interested status
+        if (candidateIndex !== -1) {
+          candidates[candidateIndex].interested = true;
+          localStorage.setItem("candidates", JSON.stringify(candidates));
+          alert("Candidate marked as interested!");
+        }
+      }
+    </script>
+  </body>
+</html>
